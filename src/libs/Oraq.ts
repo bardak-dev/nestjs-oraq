@@ -62,7 +62,7 @@ export class Oraq{
     return this._ready;
   }
   async limit(job,{jobId,jobData,lifo=false}: {
-    jobId?: string,
+    jobId?: number | string,
     jobData?: unknown,
     lifo?: boolean
   }={}){
