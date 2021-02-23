@@ -1,9 +1,8 @@
 'use strict';
 
-const assert = require('assert');
-const Oraq = require('../index');
-const Coordinator = require('../Coordinator');
-
+const assert=require('assert');
+const {Oraq}=require('../dist/libs/Oraq');
+const {Coordinator}=require('../dist/libs/Coordinator');
 
 /**
  *
@@ -14,67 +13,66 @@ const Coordinator = require('../Coordinator');
 /**
  * options validation
  */
-(() => {
-  assert.throws(() => new Coordinator(), /^Error: options are required/);
-  assert.throws(() => new Coordinator({}), /^Error: jobId/);
-  assert.throws(() => new Coordinator({
-    jobId: '1'
-  }), /^Error: keyPending/);
-  assert.throws(() => new Coordinator({
-    jobId: '1',
-    keyPending: 'pending'
-  }), /^Error: keyProcessing/);
-  assert.throws(() => new Coordinator({
-    jobId: '1',
-    keyPending: 'pending',
-    keyProcessing: 'processing'
-  }), /^Error: lock/);
-  assert.throws(() => new Coordinator({
-    jobId: '1',
-    keyPending: 'pending',
-    keyProcessing: 'processing',
-    lock: ':lock'
-  }), /^Error: concurrency/);
-  assert.throws(() => new Coordinator({
-    jobId: '1',
-    keyPending: 'pending',
-    keyProcessing: 'processing',
-    lock: ':lock',
-    concurrency: 1
-  }), /^Error: timeout/);
-  assert.throws(() => new Coordinator({
-    jobId: '1',
-    keyPending: 'pending',
-    keyProcessing: 'processing',
-    lock: ':lock',
-    concurrency: 1,
-    timeout: 10000
-  }), /^Error: client/);
+(()=>{
+  assert.throws(()=>new Coordinator(),/^Error: options are required/);
+  assert.throws(()=>new Coordinator({}),/^Error: jobId/);
+  assert.throws(()=>new Coordinator({
+    jobId:'1'
+  }),/^Error: keyPending/);
+  assert.throws(()=>new Coordinator({
+    jobId:'1',
+    keyPending:'pending'
+  }),/^Error: keyProcessing/);
+  assert.throws(()=>new Coordinator({
+    jobId:'1',
+    keyPending:'pending',
+    keyProcessing:'processing'
+  }),/^Error: lock/);
+  assert.throws(()=>new Coordinator({
+    jobId:'1',
+    keyPending:'pending',
+    keyProcessing:'processing',
+    lock:':lock'
+  }),/^Error: concurrency/);
+  assert.throws(()=>new Coordinator({
+    jobId:'1',
+    keyPending:'pending',
+    keyProcessing:'processing',
+    lock:':lock',
+    concurrency:1
+  }),/^Error: timeout/);
+  assert.throws(()=>new Coordinator({
+    jobId:'1',
+    keyPending:'pending',
+    keyProcessing:'processing',
+    lock:':lock',
+    concurrency:1,
+    timeout:10000
+  }),/^Error: client/);
 })();
 
 /**
  * properties
  */
 
-(() => {
-  const coordinator = new Coordinator({
-    jobId: '1',
-    keyPending: 'pending',
-    keyProcessing: 'processing',
-    lock: ':lock',
-    concurrency: 1,
-    timeout: 10000,
-    client: {}
+(()=>{
+  const coordinator=new Coordinator({
+    jobId:'1',
+    keyPending:'pending',
+    keyProcessing:'processing',
+    lock:':lock',
+    concurrency:1,
+    timeout:10000,
+    client:{}
   });
 
   assert.ok(coordinator);
-  assert.ok(coordinator.canRun, true);
-  assert.strictEqual(typeof coordinator.keepAlive, 'function');
-  assert.strictEqual(typeof coordinator.stopKeepAlive, 'function');
-  assert.strictEqual(typeof coordinator.wait, 'function');
-  assert.strictEqual(typeof coordinator.stopWait, 'function');
+  assert.ok(coordinator.canRun,true);
+  assert.strictEqual(typeof coordinator.keepAlive,'function');
+  assert.strictEqual(typeof coordinator.stopKeepAlive,'function');
+  assert.strictEqual(typeof coordinator.wait,'function');
+  assert.strictEqual(typeof coordinator.stopWait,'function');
 })();
-
 
 /**
  *
@@ -82,47 +80,47 @@ const Coordinator = require('../Coordinator');
  *
  */
 
-Promise.resolve().then(async () => {
+Promise.resolve().then(async()=>{
   /**
    * properties
    */
 
-  const oraq = new Oraq();
+  const oraq=new Oraq();
 
-  try {
+  try{
     assert.ok(oraq);
-    assert.strictEqual(typeof oraq.limit, 'function');
-    assert.strictEqual(typeof oraq.quit, 'function');
-    assert.strictEqual(typeof oraq.removeJobById, 'function');
-  } finally {
+    assert.strictEqual(typeof oraq.limit,'function');
+    assert.strictEqual(typeof oraq.quit,'function');
+    assert.strictEqual(typeof oraq.removeJobById,'function');
+  }finally{
     await oraq.quit();
   }
-}).then(async () => {
+}).then(async()=>{
   /**
    * processing time
    */
 
-  const job = ms => new Promise(resolve => setTimeout(() => resolve(ms), ms));
-  const oraq = new Oraq({
-    id: 'test',
-    prefix: 'oraq_test',
-    concurrency: 1
+  const job=ms=>new Promise(resolve=>setTimeout(()=>resolve(ms),ms));
+  const oraq=new Oraq({
+    id:'test',
+    prefix:'oraq_test',
+    concurrency:1
   });
 
-  try {
-    const start = Date.now();
+  try{
+    const start=Date.now();
 
     await Promise.all([
       1000,
       1000,
       1000,
       1000
-    ].map(delay => oraq.limit(job, {jobData: delay})));
+    ].map(delay=>oraq.limit(job,{jobData:delay})));
 
-    const end = Date.now();
+    const end=Date.now();
 
-    assert.strictEqual(end >= start + 4000, true);
-  } finally {
+    assert.strictEqual(end>=start+4000,true);
+  }finally{
     // close redis connections
     await oraq.quit();
   }
