@@ -1,6 +1,6 @@
 {
   "name": "nestjs-oraq",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Ordered redis asynchronous queue",
   "main": "dist/index.js",
   "directories": {
