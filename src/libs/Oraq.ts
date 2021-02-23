@@ -20,7 +20,10 @@ export class Oraq{
     const {
       id=ORAQ_DEFAULT_ID,
       prefix='',
-      connection,
+      redis={
+        host:'localhost',
+        port:6379
+      },
       ping=60*1000,
       timeout=2*60*60*1000,
       concurrency=1,
@@ -37,11 +40,11 @@ export class Oraq{
     // lock key suffix
     this._lock=':lock';
     // redis client
-    this._client=new Redis(connection);
+    this._client=new Redis(redis);
     // enable namespace events
     this._client.config('SET','notify-keyspace-events','Kgxl');
     // keyspace events subscriber
-    this._subscriber=new Redis(connection);
+    this._subscriber=new Redis(redis);
     this._ready=null;
   }
   async _init(){
