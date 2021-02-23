@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && yarn tsc -p tsconfig.build.json",
+    "check": "yarn tslint src/*.ts src/**/*.ts && yarn prettier -w src/*.ts src/**/*.ts",
     "test": "NODE_ENV=test node ./test/index.js"
   },
   "repository": {
