@@ -154,3 +154,4 @@ export class Oraq{
       .exec();
   }
 }
+export default Oraq
