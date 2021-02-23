@@ -24,7 +24,7 @@ export class OraqCoreModule{
    * @param options
    * @param injectOption
    */
-  static forAsync(options: Partial<OraqModuleOptions>|Array<Partial<OraqModuleOptions>>,injectOption: OraqModuleAsyncOption){
+  static forAsync(options: Partial<OraqModuleOptions>|Partial<OraqModuleOptions>[],injectOption: OraqModuleAsyncOption){
     const optionProvider=this.createAsyncOptionsProvider(injectOption);
     const redisClientProviders=OraqProvider.init(this.resolveOptions(options as any));
     return {

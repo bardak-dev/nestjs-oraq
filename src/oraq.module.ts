@@ -17,7 +17,7 @@ export class OraqModule{
    * @param options
    * @param injectOption
    */
-  static forAsync(options: Partial<OraqModuleOptions>|Array<Partial<OraqModuleOptions>>,injectOption: OraqModuleAsyncOption){
+  static forAsync(options: Partial<OraqModuleOptions>|Partial<OraqModuleOptions>[],injectOption: OraqModuleAsyncOption){
     return {
       module:OraqModule,
       imports:[OraqCoreModule.forAsync(options,injectOption)]

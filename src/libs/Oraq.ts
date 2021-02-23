@@ -12,8 +12,8 @@ export class Oraq{
   _keyProcessing: string;
   _keyPending: string;
   _lock: string;
-  _client: Redis;
-  _subscriber: Redis;
+  _client: Redis.Redis;
+  _subscriber: Redis.Redis;
   _ready: null|Promise<unknown>;
   _isSubscribed: boolean;
   constructor(options){
@@ -134,11 +134,11 @@ export class Oraq{
           const queueStart=`__keyspace@0__:${queueKey}:`;
           if(channel.startsWith(queueStart)){
             const expiredJobId=channel.slice(queueStart.length,-this._lock.length);
-            this._client.lrem(queueKey,1,expiredJobId).catch(console.error);
+            this._client.lrem(queueKey,1,expiredJobId).catch(/*console.error*/);
           }
         }
       }else if(message==='lrem'){
-        coordinator.wait(this._ping).catch(console.error);
+        coordinator.wait(this._ping).catch(/*console.error*/);
       }
     };
   }

@@ -5,7 +5,7 @@ export class Coordinator{
   _keepAliveTimeout: NodeJS.Timeout|null;
   _waitTimeout: NodeJS.Timeout|null;
   _concurrency: number;
-  _client: Redis;
+  _client: Redis.Redis;
   _resolve: <T>(value: T|PromiseLike<T>) => void|null;
   _keyPending: string;
   _keyProcessing: string;
@@ -102,18 +102,22 @@ export class Coordinator{
     const nextJobId=lindexRes[1];
     if(processingCount<this._concurrency){
       switch(this._mode){
-      case 'limiter':
+      case 'limiter':{
         this._resolve(true);
         break;
-      case 'queue':
-        nextJobId===this._jobId&&this._resolve(true);
+      }
+      case 'queue':{
+        if(nextJobId===this._jobId){
+          this._resolve(true);
+        }
         break;
+      }
       }
     }
   }
   async _removeStuckJobs(queueKey: string){
     const jobIds=await this._client.lrange(queueKey,0,-1);
-    let stuckJobs=new Set();
+    let stuckJobs: Set<any>=new Set();
     if(!jobIds.length){
       return;
     }
