@@ -15,9 +15,7 @@ export class OraqCoreModule {
     const optionProvider: Provider = this.createAsyncOptionsProvider({
       useValue: Array.isArray(options) ? options : [options],
     });
-    const oraqProviders = OraqProvider.init(
-      this.resolveOptions(options),
-    );
+    const oraqProviders = OraqProvider.init(this.resolveOptions(options));
     return {
       module: OraqCoreModule,
       providers: [optionProvider, ...oraqProviders],
