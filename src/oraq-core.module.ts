@@ -15,13 +15,13 @@ export class OraqCoreModule {
     const optionProvider: Provider = this.createAsyncOptionsProvider({
       useValue: Array.isArray(options) ? options : [options],
     });
-    const redisClientProviders = OraqProvider.init(
+    const oraqProviders = OraqProvider.init(
       this.resolveOptions(options),
     );
     return {
       module: OraqCoreModule,
-      providers: [optionProvider],
-      exports: redisClientProviders,
+      providers: [optionProvider, ...oraqProviders],
+      exports: oraqProviders,
     };
   }
   /**
@@ -33,13 +33,13 @@ export class OraqCoreModule {
     injectOption: OraqModuleAsyncOption,
   ) {
     const optionProvider = this.createAsyncOptionsProvider(injectOption);
-    const redisClientProviders = OraqProvider.init(
+    const oraqProviders = OraqProvider.init(
       this.resolveOptions(options as any),
     );
     return {
       module: OraqCoreModule,
-      providers: [optionProvider, ...redisClientProviders],
-      exports: redisClientProviders,
+      providers: [optionProvider, ...oraqProviders],
+      exports: oraqProviders,
     };
   }
   private static resolveOptions(

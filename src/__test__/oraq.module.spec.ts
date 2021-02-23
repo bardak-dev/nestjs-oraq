@@ -5,8 +5,8 @@ import { createToken } from '../utils/create.token';
 import { InjectOraq } from '../decorators';
 import { Oraq } from '../libs';
 
-describe('RedisModule', () => {
-  it('Instance Redis', async () => {
+describe('OraqModule', () => {
+  it('Instance Oraq', async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         OraqModule.forRoot({
@@ -19,11 +19,11 @@ describe('RedisModule', () => {
     }).compile();
     const app = module.createNestApplication();
     await app.init();
-    const redisModule = module.get(OraqModule);
-    expect(redisModule).toBeInstanceOf(Oraq);
+    const oraqModule = module.get(OraqModule);
+    expect(oraqModule).toBeInstanceOf(OraqModule);
     await app.close();
   });
-  it('Instance Redis client provider', async () => {
+  it('Instance Oraq provider', async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         OraqModule.forRoot([
@@ -52,7 +52,7 @@ describe('RedisModule', () => {
     expect(oraqTest).toBeInstanceOf(Oraq);
     await app.close();
   });
-  it('inject redis connection', async () => {
+  it('inject oraq', async () => {
     @Injectable()
     class TestProvider {
       constructor(@InjectOraq() private oraq: Oraq) {}

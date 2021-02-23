@@ -1,10 +1,10 @@
+import { Oraq } from './libs/Oraq';
+import { OraqModuleOptions } from './oraq.interface';
 import { Provider } from '@nestjs/common';
 import { createToken } from './utils/create.token';
 import { ORAQ_DEFAULT_KEY, ORAQ_MODULE_OPTIONS } from './oraq.constant';
-import { Oraq } from './libs/Oraq';
-import { OraqModuleOptions } from './oraq.interface';
 
-const clients: Map<string, Oraq> = new Map();
+const instances: Map<string, Oraq> = new Map();
 
 export class OraqProvider {
   /**
@@ -28,12 +28,12 @@ export class OraqProvider {
    */
   private static createOraqProvider(option: OraqModuleOptions): Provider {
     const token = createToken(option.name);
-    let client: Oraq;
-    if (clients.get(token)) {
-      client = clients.get(token);
+    let oraq: Oraq;
+    if (instances.get(token)) {
+      oraq = instances.get(token);
       return {
         provide: token,
-        useValue: client,
+        useValue: oraq,
       };
     } else {
       return {
@@ -45,9 +45,9 @@ export class OraqProvider {
               (option.name === ORAQ_DEFAULT_KEY && item.name === undefined),
           );
           option = { ...option, ...config };
-          client = this.createOraq(option);
-          clients.set(token, client);
-          return client;
+          oraq = this.createOraq(option);
+          instances.set(token, oraq);
+          return oraq;
         },
         inject: [ORAQ_MODULE_OPTIONS],
       };
